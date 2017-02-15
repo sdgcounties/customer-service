@@ -1,0 +1,181 @@
+<script>
+  var sheetinfo = "not yet set";
+  $(document).ready(function(){
+    google.script.run.withSuccessHandler(storeSheetInfo).getSheetInfo();
+  });
+  function openaddcaselink(){
+      google.script.run.withSuccessHandler(openlink).getAddCaseLink();
+  }
+  function openlink(data){
+    window.location.href = data;
+  }
+
+  function storeSheetInfo(data){
+    sheetinfo = JSON.parse(data);
+    google.script.run.withSuccessHandler(PopulateAssignedTo).getAssignedToOptions();
+  }
+
+  function PopulateAssignedTo(data){
+    var returneddata = JSON.parse(data);
+    $('#assignedto').append("<option value='All'>All</option>");
+    for (i=1;i<returneddata.length;i++){
+      $('#assignedto').append("<option value='" +returneddata[i][0] +"'>" + returneddata[i][0] +"</option>");
+    }
+    seturlvalues();
+    searchforcases();//call get cases from server
+  }
+  function seturlvalues(){
+    if(urlparameters.parameter.hasOwnProperty("caseid")){ //urlparameters are declared and populated at the top of the index.html file
+      $("#caseid").val(urlparameters.parameter.caseid);
+    }
+    if(urlparameters.parameter.hasOwnProperty("search")){ //urlparameters are declared and populated at the top of the index.html file
+      $("#searchtext").val(urlparameters.parameter.search);
+    }
+    if(urlparameters.parameter.hasOwnProperty("assignedto")){ //urlparameters are declared and populated at the top of the index.html file
+      $("#assignedto").val(urlparameters.parameter.assignedto);
+    }
+    if(urlparameters.parameter.hasOwnProperty("status")){ //urlparameters are declared and populated at the top of the index.html file
+      $("#status").val(urlparameters.parameter.status);
+    }
+    if(urlparameters.parameter.hasOwnProperty("isdeleted")){ //urlparameters are declared and populated at the top of the index.html file
+      $("#isdeleted").val(urlparameters.parameter.isdeleted);
+    }
+  }
+  //Search
+  function searchforcases(){
+   $('#searchinfo').fadeOut();
+   $('#caselisting').fadeOut();
+   $('#loading').fadeIn();
+   
+   var searchobject = {};
+
+   searchobject.assignedto = $("#assignedto").val();
+   searchobject.status = $("#status").val();
+   searchobject.isdeleted = $("#isdeleted").val();
+   searchobject.searchtext = $("#searchtext").val();
+   searchobject.caseid = $("#caseid").val();
+   console.log("getCasesWithActions has been called");
+   console.log(searchobject);
+   google.script.run.withSuccessHandler(ShowReturnedData).getCasesWithActions(JSON.stringify(searchobject));
+  }
+
+  //Display Cases
+  function ShowReturnedData(data){
+	var sngq = "'";//single quote
+    var dblq = '"';//double quote
+    var casecolumns = sheetinfo.detailCase; //get column numbers for cases
+    var actioncolumns = sheetinfo.detailAction;//get column numbers for action
+    //Clear Search Results
+    $('#searchinfo').children("div").remove();
+    $('#caselisting').children("div").remove();
+	//Show Search and Case Divs
+    $('#searchinfo').fadeIn();
+    $('#caselisting').fadeIn();
+    
+    var returneddata = JSON.parse(data);
+    //===Search Results===
+    $('#searchinfo').append("<div><small>" +
+                                 "  Number of Cases: "+ returneddata.searchresultcount +
+                                 " (Search Time: " + returneddata.searchtime/1000 + "s" +
+                                 ")</small></div>");
+   //Loop through Cases
+   for(i=0;i<returneddata.searchresults.length;i++){ //loop through returned cases
+     var caserow = returneddata.searchresults[i].datarow; //case row from server
+     var actionrows = returneddata.searchresults[i].actions; //case's action rows from server
+     
+     var panelstarthtml ="<div class=" + dblq + "panel panel-default" + dblq +">";
+     var panelbodyhtml ="";
+     var panelendhtml ="</div>";
+     
+     //===Case Title===
+     //isDeleted
+     if(caserow[Number(casecolumns.colIsDeleted)-1] == 'Yes'){ 
+      panelstarthtml = panelstarthtml + "<div class='panel-heading'><h4 class='panel-title bg-danger'>DELETED "
+      }else{
+       panelstarthtml = panelstarthtml +"<div class='panel-heading'><h4 class='panel-title'>";
+      }
+      //status
+      if(caserow[Number(casecolumns.colStatus)-1] == 'Open'){ 
+      panelstarthtml = panelstarthtml + "<span class='' aria-hidden='true'></span> "
+      }else if(caserow[Number(casecolumns.colStatus)-1] == 'Closed'){
+       panelstarthtml = panelstarthtml +"<span class='fa fa-check' aria-hidden='true'></span> Closed - ";
+      }
+      
+       panelstarthtml = panelstarthtml + //caserow[Number(casecolumns.colStatus)-1] +
+                                 "" +caserow[Number(casecolumns.colName)-1] + 
+                                 " (" +caserow[Number(casecolumns.colLocation)-1] + ")"+
+                                 "</h4></div>";
+
+	 //===Case Details===
+	 var divcaseinfoid = "caseinfoid_" + [i];
+     var divcaseinfostarthtml = "<div class='well' id=" + dblq + divcaseinfoid + dblq +"style=" + dblq + "display:none;" + dblq + ">";
+     var divcaseinfocontenthtml = "" ;
+     var divcaseinfoendhtml = "</div>";
+     var divshowhidecaseinfohtml = "<span class='btn btn-default btn-xs' onclick=" + dblq + "$(" + sngq + "#" + divcaseinfoid + sngq +").toggle()" + dblq + ">" +
+                            "Show Details</span>";
+     var strcaseinfotitle = "Detailed Info";
+     divcaseinfocontenthtml = divcaseinfocontenthtml + "<strong>"+ strcaseinfotitle.replace("=",":") + "</strong><br>";
+     var casestartcol = Number(casecolumns.colFormDataStart)-1;//starts with the first data column
+     var casestopatcol = caserow.length; //show all form data
+     var casedescription = "";
+     for(var caseinfoattribute=casestartcol;caseinfoattribute<casestopatcol;caseinfoattribute++){
+         var strcaseinfodata = caserow[caseinfoattribute];
+         divcaseinfocontenthtml = divcaseinfocontenthtml + strcaseinfodata.replace("=",":") + "<br>";
+         //get description text
+         if(strcaseinfodata.substr(0, strcaseinfodata.indexOf("=")) == "Description"){
+            casedescription = strcaseinfodata.substr(strcaseinfodata.indexOf("=")+1);
+         }
+       }
+     //===Action Details===
+     var divacitionid = "caseactionid_" + [i];
+     var divactionstarthtml = "<div class='well' id=" + dblq + divacitionid + dblq +"style=" + dblq + "display:none;" + dblq + ">";
+     var divactioncontenthtml = "" ;
+     var divactionendhtml = "</div>";
+     var divshowhideactionhtml = " <span class='btn btn-default btn-xs' onclick=" + dblq + "$(" + sngq + "#" + divacitionid + sngq +").toggle()" + dblq + ">" +
+                            "Show Actions</span>";
+     for(var k=0;k<actionrows.length;k++){
+       var stractiontitle = actionrows[k][Number(actioncolumns.colFormDataStart)-1];
+       divactioncontenthtml = divactioncontenthtml + "<strong>"+ stractiontitle.replace("=",":") + "</strong>" +
+                                                     "<br>";
+       var datastartcol = Number(actioncolumns.colFormDataStart);//this skips the action taken col
+       var stopatcol = actionrows[k].length-2; //do not show the last two columns (which are caseID and actionID)
+       for( var actionattribute=datastartcol;actionattribute<stopatcol;actionattribute++){
+         var stractiondata = actionrows[k][actionattribute]
+         divactioncontenthtml = divactioncontenthtml + stractiondata.replace("=",":") + "<br>";
+       }
+       //add action Id and last updated
+       divactioncontenthtml = divactioncontenthtml +"Action ID: " + actionrows[k][Number(actioncolumns.colActionId)-1] +
+                                 " <small>Updated: " + actionrows[k][Number(actioncolumns.colLastUpdated)-1] +"</small>"+"<br>";
+       //===Action Buttons===
+       var editactionbutton = "<a class="+ dblq + "btn btn-primary btn-xs" + dblq +" href=" + dblq + actionrows[k][Number(actioncolumns.colEditActionLink)-1] +
+                               dblq + "><span class='fa fa-pencil' aria-hidden='true'></span> Action</a>";
+       var deleteactionbutton = " <a class="+ dblq + "btn btn-danger btn-xs" + dblq +" href=" + dblq + actionrows[k][Number(actioncolumns.colDeleteActionLink)-1] +
+                               dblq + "><span class='fa fa-trash-o' aria-hidden='true'></span> Action</a>";
+       divactioncontenthtml = divactioncontenthtml + editactionbutton + deleteactionbutton + "<br><br>";
+     }
+
+     //===Main Case Info===
+     var maincaseinfohtml = "<div class='panel-body'>" +
+                                 "Case: " + caserow[Number(casecolumns.colCaseId)-1] +
+                                 " <small>Updated: " + caserow[Number(casecolumns.colLastUpdated)-1] +"</small>"+
+                                 "<br>Name: " + caserow[Number(casecolumns.colName)-1] +
+                                 "<br>Location: " + caserow[Number(casecolumns.colLocation)-1] +
+                                 "<br>Assigned To: " + caserow[Number(casecolumns.colAssingedTo)-1] +
+                                 "<br>Description: " + casedescription +
+                                 "<br>"+ divshowhidecaseinfohtml + divshowhideactionhtml+
+                                 "</div>"
+      var detailedcaseinfohtml = divcaseinfostarthtml +divcaseinfocontenthtml + divcaseinfoendhtml
+      var actioninfohtml = divactionstarthtml +divactioncontenthtml + divactionendhtml
+     //===Case Buttons===
+     var casebuttonshtml = "<div class='panel-footer'>" +
+                                 "<a class='btn btn-success' href='" + caserow[Number(casecolumns.colAddActionLink)-1] + "'><span class='fa fa-plus' aria-hidden='true'></span> Action</a>" +
+                                 " <a class='btn btn-primary' href='" + caserow[Number(casecolumns.colEditCaseLink)-1] + "'><span class='fa fa-pencil' aria-hidden='true'></span> Case</a>" +
+                                 " <a class='btn btn-danger'href='" + caserow[Number(casecolumns.colDeleteCaseLink)-1] + "'><span class='fa fa-trash-o' aria-hidden='true'></span> Case</a>" +
+                                 //"<a class='btn btn-info' href='" + caserow[Number(casecolumns.colSummaryDocLink)-1] + "'>View</a>" +
+                                 "</div>"; 
+    panelbodyhtml = maincaseinfohtml + detailedcaseinfohtml + actioninfohtml + casebuttonshtml;                                                   
+    $('#caselisting').append(panelstarthtml + panelbodyhtml + panelendhtml);                                                   
+   }
+   $('#loading').fadeOut();//Hide Loading div
+  }
+</script>
