@@ -1,0 +1,64 @@
+<head>
+<script> 
+   //this gets the ulr parameters that were passed to the web app on the server
+   var urlparameters = JSON.parse(<?= urlparameters ?>);
+</script>
+<!--jquery-->
+<script  src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<!--font awsome-->
+<script src="https://use.fontawesome.com/e40834b818.js"></script>
+<!--bootstrap-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!--custom code Javascript.html in google apps script-->
+<?!= include('Javascript'); ?>
+</head>
+<body>
+	<div class="col-md-9" >
+		<h3>Customer Service</h3>
+		<a  class="btn btn-success" onclick="openaddcaselink();"><span class="fa fa-plus" aria-hidden="true"></span> Case</a>
+		<br>
+<form class="form-inline">
+
+	<div class="form-group">
+		<label for="assignedto">Assigned To</label>
+		<select id="assignedto"></select>
+	</div>
+	<div class="form-group">
+		<label for="status">Status</label>
+		<select id="status">
+			<option value="All">All</option>
+			<option value="Open">Open</option>
+			<option value="Closed">Closed</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label>Is Deleted</label>
+		<select id="isdeleted">
+			<option value="All">All</option>
+			<option value="Yes">Yes</option>
+			<option value="No">No</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<input id="searchtext" type="text" 
+			name="Value" placeholder="Search Text" 
+			onkeydown = "if (event.keyCode == 13) searchforcases()">
+	</div>
+	<div class="form-group">
+		<input id="caseid" type="text" 
+			name="Value" placeholder="Case ID" 
+			onkeydown = "if (event.keyCode == 13) searchforcases()">
+	</div>
+	<input class="btn btn-default btn-sm" type="button" value="Search" onclick="searchforcases();"/>
+
+</form>
+		<div class="panel panel-default" id="loading"><span class="fa fa-spinner fa-spin fa-fw" aria-hidden="true"></span>  Getting cases from the server...</div>
+		<div id="searchinfo"></div>
+		<div id="caselisting"></div>        
+	</div>
+</body>
+
+
+
