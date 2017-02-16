@@ -8,7 +8,6 @@ A Google Apps program that tracks Municipal Government requests such as complain
 
 [Technical Information.pdf](/documentation/Technical Information.pdf)
 
-[Technical Information.pdf](/documentation/Technical Information.pdf)
 
 
 
