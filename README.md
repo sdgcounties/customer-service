@@ -1,6 +1,5 @@
 # Customer Service
-A Google Apps program that tracks Municipal Government requests such as complaints and comments.
-
+A program that helps Municipal Governments track requests such as complaints and comments. The program is based on google apps script and is mainly contained in a spreadsheet. You can use the following link to open a copy of the [Customer Service Program Template]. Detailed instructions can be found below.
 
 [What the Program Does](/documentation/What The Program Does.pdf)
 
@@ -8,11 +7,13 @@ A Google Apps program that tracks Municipal Government requests such as complain
 
 [Installation Instructions](/documentation/Installation Instructions.pdf)
 
-[How Customize The Program](/documentation/How To Customize The Program.pdf)
+[How To Customize The Program](/documentation/How To Customize The Program.pdf)
 
 [Future Enhancements](/documentation/Future Enhancements.pdf)
 
-[Technical Information.pdf](/documentation/Technical Information.pdf)
+[Technical Information](/documentation/Technical Information.pdf)
+
+[Customer Service Program Template](https://drive.google.com/open?id=1Myg-od2O3LhvN4d_85Z8OL-Oy4nialxmVLo6PFs9FR0) - you can open this and make a copy. This template contains all of the programming code.
 
 
 
