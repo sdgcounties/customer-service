@@ -37,13 +37,9 @@ var SDGSettings = (function () {
   SDGSettings.sheetInfo.detailCase.colEditCaseLink = '6';
   SDGSettings.sheetInfo.detailCase.colDeleteCaseLink = '7';
   SDGSettings.sheetInfo.detailCase.colAddActionLink = '8';
-  SDGSettings.sheetInfo.detailCase.colSummaryDocLink = '9';
-  SDGSettings.sheetInfo.detailCase.colSummaryDocId = '10';
-  SDGSettings.sheetInfo.detailCase.colIsDeleted = '11';
-  SDGSettings.sheetInfo.detailCase.colLastUpdated = '12';
-  SDGSettings.sheetInfo.detailCase.colLinkUpToDate = '13';
-  SDGSettings.sheetInfo.detailCase.colSummaryDocUpToDate = '14';
-  SDGSettings.sheetInfo.detailCase.colFormDataStart = '15';
+  SDGSettings.sheetInfo.detailCase.colIsDeleted = '9';
+  SDGSettings.sheetInfo.detailCase.colLastUpdated = '10';
+  SDGSettings.sheetInfo.detailCase.colFormDataStart = '11';
   SDGSettings.sheetInfo.detailAction = {};
   SDGSettings.sheetInfo.detailAction.colActionId = '1';
   SDGSettings.sheetInfo.detailAction.colCaseId = '2';
@@ -77,13 +73,6 @@ var SDGSettings = (function () {
   //Form
   SDGSettings.form = {};
   SDGSettings.form.getFormQuestions = getFormQuestions;
-  //Lists  
-  //SDGSettings.lists = {};
-  //SDGSettings.lists.caseType = ss.getSheetByName('listCaseType').getDataRange().getValues();
-  //SDGSettings.lists.assignCase = ss.getSheetByName('listAssignCase').getDataRange().getValues();
-  //SDGSettings.lists.actionTaken = ss.getSheetByName('listActionTaken').getDataRange().getValues();
-  //SDGSettings.lists.caseResolved = ss.getSheetByName('listCaseResolved').getDataRange().getValues();
-  //SDGSettings.lists.deleteConfirm = ss.getSheetByName('listDeleteConfirm').getDataRange().getValues();
   //Filter Criteria
   SDGSettings.filterCaseOptions = {};
   SDGSettings.filterCaseOptions.status = 'All';//Open,Closed,All
@@ -157,7 +146,6 @@ var SDGSettings = (function () {
   function setupAllFolders(){
     setupMainFolder();
     createFolder('FormsFolder','Forms');
-    createFolder('DocumentsFolder', 'Documents');
   }
   /**
   * setupMainFolder - setups up the main folder
@@ -168,7 +156,7 @@ var SDGSettings = (function () {
     //check if Folder is already setup
     var folderId = getIdByLinkName('MainFolder');
     if (folderId == 'Not Found'){
-      //If Main Folder Id does not exist then do this
+      //If Main Folder Id does not exist
       var currentFileId = SpreadsheetApp.getActive().getId();
       var currentFile = DriveApp.getFileById(currentFileId);
       var parentFolders = currentFile.getParents();
@@ -179,6 +167,8 @@ var SDGSettings = (function () {
         folder = parentFolders.next();
         folder.removeFile(currentFile);//remove the spreadsheet from other folders
       }
+      //rename the spreadsheet to Customer Service
+      currentFile.setName("Customer Service");
       var folderUrl = mainFolder.getUrl();
       folderId = mainFolder.getId();
       SDGSettings.index.updateLink(folderName, folderUrl, folderId);
@@ -317,9 +307,6 @@ var SDGSettings = (function () {
       return id;
     }
     if (bolExists == false){
-      //call validate links
-      //call custom error message
-      //SDGErrors.custom("The link named:" + linkName + "could not be found. The id could not be returned.");
       return 'Not Found';
     }
     
