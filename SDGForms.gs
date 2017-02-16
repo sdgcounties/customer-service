@@ -35,15 +35,10 @@ var SDGForms = (function() {
   * updateFormLinks - Updates From Links on detailCase and detailAction
   */
   function updateFormLinks(){
-
     //Update detailCase
     SDGData.updateAllDetailActionFormLinks();
     //Update detailAction
     SDGData.updateAllDetailCaseFormLinks();
-    //Update Summary Documents
-    //SDGDocuments.updateAllSummaryDocs();
-    //Update Listing Documents
-    //SDGDocuments.updateListingDocuments();
   }
   
   //*****Event Functions*****
@@ -81,20 +76,8 @@ var SDGForms = (function() {
       var timestamp = "Added= " + Utilities.formatDate(new Date(), SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM-dd'T'HH:mm:ss z");
       sh.getRange(newrow, colnum).setValue(timestamp);//adds a time stamp to the last column 
       colnum ++;
-      //---Update detailCase and create case summary document sheet---
+      //---Update detailCase---
       updateDetailCaseSheet(caseID, itemResponses);
-      
-      //Update Listing Document
-//      var newassignedto = getAssignedToFromResponse(itemResponses);
-//      if (assignedto == newassignedto){
-//        SDGDocuments.updateListingDocument(assignedto);  
-//      }
-//      else{
-//        SDGDocuments.updateListingDocument(assignedto);//update old listing document
-//        SDGDocuments.updateListingDocument(newassignedto); //update current listing document
-//      }
-//      
-//      SDGDocuments.updateListingDocumentAllCases();
       
       //Notify Assigned to
       SDGNotification.sendCaseInfoToAssignedTo(caseID);
@@ -153,12 +136,8 @@ var SDGForms = (function() {
        //Update detailAction sheet
        updateDetailActionSheet(actionID, caseID, itemResponses)
        
-       //Update detailCase sheet and recreate case summary document
+       //Update detailCase sheet
        SDGForms.forms.updateCaseStatus(caseID);
- 
-       //Update Listing Documents
-//       SDGDocuments.updateListingDocument(getAssignedToFromCaseId(caseID));
-//       SDGDocuments.updateListingDocumentAllCases()
      }
      catch (err){
        SDGErrors.custom('onSubmitAction Error message = ' + err); 
@@ -227,13 +206,6 @@ var SDGForms = (function() {
         }
       }
       
-//      //Update Summary Document
-//      sh.getRange(matchingRowNum, cols.colSummaryDocUpToDate).setValue("No at " + Utilities.formatDate(new Date(), SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM-dd'T'HH:mm:ss z"));
-//      SDGDocuments.createCaseSummaryDoc(caseID);
-//      sh.getRange(matchingRowNum, cols.colSummaryDocUpToDate).setValue("Yes at " + Utilities.formatDate(new Date(), SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM-dd'T'HH:mm:ss z"));
-//      //Update Listing Document
-//      SDGDocuments.updateListingDocument(getAssignedToFromCaseId(caseID));
-//      SDGDocuments.updateListingDocumentAllCases();
     }
     catch (err){
       SDGErrors.custom('onSubmitDeleteCase Error message = ' + err); 
@@ -282,15 +254,10 @@ var SDGForms = (function() {
       sh.getRange(newrow, colnum).setValue(timestamp);//adds a time stamp to the last column 
       colnum ++;
       //---Update detailAction sheet---
-      //updateDetailCaseSheet(caseID, itemResponses);
       deleteAction(actionID, itemResponses);
 
-       //Update detailCase sheet and recreate case summary document
+       //Update detailCase sheet
        SDGForms.forms.updateCaseStatus(caseID);
- 
-//      //Update Listings Documents
-//      SDGDocuments.updateListingDocument(getAssignedToFromCaseId(caseID));
-//      SDGDocuments.updateListingDocumentAllCases()
     }
     catch (err){
       SDGErrors.custom('onSubmitDeleteAction Error message = ' + err); 
@@ -524,14 +491,6 @@ var SDGForms = (function() {
       colnumFormDataStart ++;
     }
       
-    //--Add Link Up To Date--
-    sh.getRange(matchingRowNum, cols.colLinkUpToDate).setValue("No");
-      //set row to red
-      
-    //--Add Summary Doc Up To Date--
-    sh.getRange(matchingRowNum, cols.colSummaryDocUpToDate).setValue("No");
-      //set row to red
-      
     //Add Name
     var name = getValueFromResponse('Name', itemResponses);
     sh.getRange(matchingRowNum, cols.colName).setValue(name);
@@ -555,15 +514,7 @@ var SDGForms = (function() {
     //Add Action Link
     var linkAddAction = SDGData.getCaseAddActionLink(caseID);
     sh.getRange(matchingRowNum, cols.colAddActionLink).setValue(linkAddAction);
-
-    //---Add linkSummaryDocument---
-//    var summaryDocInfo = SDGDocuments.createCaseSummaryDoc(caseID);
-//    sh.getRange(matchingRowNum, cols.colSummaryDocLink).setValue(summaryDocInfo.url);
-//    sh.getRange(matchingRowNum, cols.colSummaryDocId).setValue(summaryDocInfo.id);
-//    
-//    sh.getRange(matchingRowNum, cols.colSummaryDocUpToDate).setValue("Yes at " + Utilities.formatDate(new Date(), SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM-dd'T'HH:mm:ss z"));
-//    sh.getRange(matchingRowNum, cols.colLinkUpToDate).setValue("Yes at " + Utilities.formatDate(new Date(), SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM-dd'T'HH:mm:ss z"));
-//      
+    
     //---Add Last Updated---
     var lastUpdated = Utilities.formatDate(new Date(), SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM-dd'T'HH:mm:ss z");
     sh.getRange(matchingRowNum, cols.colLastUpdated).setValue(lastUpdated); 
@@ -666,13 +617,6 @@ var SDGForms = (function() {
     }else{
       sh.getRange(matchingCaseRowNum, cols.colStatus).setValue('Open');
     }
-    //---Update linkSummaryDocument---
-//    sh.getRange(matchingCaseRowNum, cols.colSummaryDocUpToDate).setValue("No at " + Utilities.formatDate(new Date(), SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM-dd'T'HH:mm:ss z"));
-//    var summaryDocInfo = SDGDocuments.createCaseSummaryDoc(caseId);
-//    sh.getRange(matchingCaseRowNum, cols.colSummaryDocLink).setValue(summaryDocInfo.url);
-//    sh.getRange(matchingCaseRowNum, cols.colSummaryDocId).setValue(summaryDocInfo.id);
-//    
-//    sh.getRange(matchingCaseRowNum, cols.colSummaryDocUpToDate).setValue("Yes at " + Utilities.formatDate(new Date(), SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM-dd'T'HH:mm:ss z"));
 
     //---Add Last Updated---
     var lastUpdated = Utilities.formatDate(new Date(), SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM-dd'T'HH:mm:ss z");
