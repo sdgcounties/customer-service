@@ -7,13 +7,10 @@
 function onOpen(){
   var spreadsheet = SpreadsheetApp.getActive();
   var menuItems = [
-    {name: '1) Create/Update Forms', functionName: 'createForms'},
-    {name: '2) Create/Update Links', functionName: 'updateFormLinks'},
-    {name: '3) Create/Update Case Summary Documents', functionName: 'updateAllSummaryDocs'},
-    {name: '4) Create/Update All Cases Listing Doc', functionName: 'updateAllCasesDoc'},
-    {name: '5) Create/Update Assigned To Case Listing Docs', functionName: 'updateAllSummaryDocs'},
-    {name: 'Email Customer Service Links', functionName:'emailCustomerServiceLinks'},
-    {name: 'Initial Folder Setup', functionName: 'createFolders'}
+    {name: 'Create Folders (only needs to run once)', functionName: 'createFolders'},
+    {name: 'Update Forms Step 1 of 2: Update Forms', functionName: 'updateForms'},
+    {name: 'Update Forms Step 2 of 2: Update Form Links', functionName: 'updateFormLinks'},
+    {name: 'Email Customer Service Links', functionName:'emailCustomerServiceLinks'}
   ];
   spreadsheet.addMenu('Customer Service', menuItems);
 }
@@ -22,29 +19,14 @@ function onOpen(){
 function createFolders(){
   SDGSettings.setup.setupAllFolders();
 }
-function createForms(){
+function updateForms(){
   SDGForms.forms.create('Case', 'Case');
   SDGForms.forms.create('Action', 'Action');
   SDGForms.forms.create('DeleteCase', 'Delete Case');
   SDGForms.forms.create('DeleteAction', 'Delete Action');
 }
-//1
 function updateFormLinks(){
-  SDGForms.forms.updateFormLinks();
-  SDGDocuments.setAllUpCaseDetailUpToDateColsAsNo();
-  SDGDocuments.setIsTheSummaryListUpToDateAsNo();
-}
-//2
-function updateAllSummaryDocs(){
- SDGDocuments.updateAllSummaryDocs(); 
-}
-//3
-function updateAllCasesDoc(){
- SDGDocuments.updateListingDocumentAllCases();
-}
-//4
-function updateListingDocs() {
- SDGDocuments.updateListingDocuments();
+    SDGForms.forms.updateFormLinks();
 }
 
 function emailCustomerServiceLinks(){
