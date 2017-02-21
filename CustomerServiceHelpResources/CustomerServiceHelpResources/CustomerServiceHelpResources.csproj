@@ -68,10 +68,21 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="documents\" />
     <Folder Include="webclient\img\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="documents\Future Enhancements.docx" />
+    <Content Include="documents\Future Enhancements.pdf" />
+    <Content Include="documents\How The Program Works.docx" />
+    <Content Include="documents\How The Program Works.pdf" />
+    <Content Include="documents\How To Customize The Program.docx" />
+    <Content Include="documents\How To Customize The Program.pdf" />
+    <Content Include="documents\Installation Instructions.docx" />
+    <Content Include="documents\Installation Instructions.pdf" />
+    <Content Include="documents\Technical Information.docx" />
+    <Content Include="documents\Technical Information.pdf" />
+    <Content Include="documents\What The Program Does.docx" />
+    <Content Include="documents\What The Program Does.pdf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
