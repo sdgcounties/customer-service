@@ -69,6 +69,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="documents\" />
+    <Folder Include="webclient\img\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Web.Debug.config">
