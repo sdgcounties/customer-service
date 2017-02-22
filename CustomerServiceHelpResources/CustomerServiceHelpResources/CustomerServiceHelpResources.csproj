@@ -62,13 +62,14 @@
   <ItemGroup>
     <Content Include="index.html" />
     <Content Include="Web.config" />
+    <Content Include="webclient\img\favicon.ico" />
+    <Content Include="webclient\img\sdg_logo_tiny.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="webclient\img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="documents\Future Enhancements.docx" />
