@@ -3,6 +3,11 @@ A program that tracks cases, which could be complaints, compliments or comments.
 
 [Customer Service Program Template](https://drive.google.com/open?id=1Myg-od2O3LhvN4d_85Z8OL-Oy4nialxmVLo6PFs9FR0) - To get to the code open this and make a copy. This template contains everything you need, except for the documentation, which is listed below.
 
+[SDG Customer Service Program Help Website](https://sdgcustomerservice.azurewebsites.net/) -  An easy way to view the help documents. 
+
+The source code for the help website as well as the google apps script code has all been made available.
+
+
 [What the Program Does](/CustomerServiceHelpResources/CustomerServiceHelpResources/documents/What The Program Does.pdf)
 
 [How The Program Works](/CustomerServiceHelpResources/CustomerServiceHelpResources/documents/How The Program Works.pdf)
