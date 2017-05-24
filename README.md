@@ -6,16 +6,3 @@ A program that tracks cases, which could be complaints, compliments or comments.
 [SDG Customer Service Program Help Website](https://sdgcustomerservice.azurewebsites.net/) -  An easy way to view the help documents. 
 
 The source code for the help website as well as the google apps script code has all been made available.
-
-
-[What the Program Does](/CustomerServiceHelpResources/CustomerServiceHelpResources/documents/What The Program Does.pdf)
-
-[How The Program Works](/CustomerServiceHelpResources/CustomerServiceHelpResources/documents/How The Program Works.pdf)
-
-[Installation Instructions](/CustomerServiceHelpResources/CustomerServiceHelpResources/documents/Installation Instructions.pdf)
-
-[How To Customize The Program](/CustomerServiceHelpResources/CustomerServiceHelpResources/documents/How To Customize The Program.pdf)
-
-[Future Enhancements](/CustomerServiceHelpResources/CustomerServiceHelpResources/documents/Future Enhancements.pdf)
-
-[Technical Information](/CustomerServiceHelpResources/CustomerServiceHelpResources/documents/Technical Information.pdf)
