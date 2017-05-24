@@ -3,7 +3,11 @@ var SDGForms = (function() {
   SDGForms.folders = {};
   SDGForms.forms = {};
   SDGForms.forms.create = formCreate;
+  SDGForms.forms.resetCaseLinks = resetCaseLinks;
+  SDGForms.forms.resetActionLinks = resetActionLinks;
   SDGForms.forms.updateFormLinks = updateFormLinks;
+  SDGForms.forms.updateCaseLinks = updateCaseLinks;
+  SDGForms.forms.updateActionLinks = updateActionLinks;
   SDGForms.forms.onSubmitCase = onSubmitCase;
   SDGForms.forms.onSubmitAction = onSubmitAction;
   SDGForms.forms.onSubmitDeleteCase = onSubmitDeleteCase;
@@ -32,6 +36,18 @@ var SDGForms = (function() {
     }
   }
   /**
+  * resetCaseLinks - Clears the case form links - this way you can tell what has been updated
+  */
+  function resetCaseLinks(){
+    SDGData.clearAllDetailCaseFormLinks();
+  }
+    /**
+  * resetActionLinks - Clears the action form links - this way you can tell what has been updated
+  */
+  function resetActionLinks(){
+    SDGData.clearAllDetailActionFormLinks();
+  }
+  /**
   * updateFormLinks - Updates From Links on detailCase and detailAction
   */
   function updateFormLinks(){
@@ -40,6 +56,15 @@ var SDGForms = (function() {
     //Update detailAction
     SDGData.updateAllDetailCaseFormLinks();
   }
+    function updateCaseLinks(){
+    //Update detailCase
+    SDGData.updateAllDetailCaseFormLinks();
+  }
+    function updateActionLinks(){
+    //Update detailAction
+    SDGData.updateAllDetailActionFormLinks();
+  }
+  
   
   //*****Event Functions*****
   /**

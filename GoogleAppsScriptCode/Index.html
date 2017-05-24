@@ -15,13 +15,23 @@
 <?!= include('Javascript'); ?>
 </head>
 <body>
-	<div class="col-md-9" >
+	<div  class="col-md-9" >
 		<h3>Customer Service</h3>
-		<a  class="btn btn-success" onclick="openaddcaselink();"><span class="fa fa-plus" aria-hidden="true"></span> Case</a>
+        <div id="addcasebuttondiv" style="display: none;">
+          <a  class="btn btn-success" onclick="openaddcaselink();"><span class="fa fa-plus" aria-hidden="true"></span> Case</a>
+        </div>
 		<br>
 <form class="form-inline">
-
-	<div class="form-group">
+    <div id="passworddiv" style="display: none;"> 
+      <div class="form-group">
+		<input id="password" type="password" 
+			name="password" placeholder="Password" 
+			onkeydown = "if (event.keyCode == 13) searchforcases()">
+	  </div>
+      <input class="btn btn-default btn-sm" type="button" value="Login" onclick="searchforcases();"/>
+    </div>
+    <div id="searchcontrolsdiv" style="display: none;">
+    <div class="form-group">
 		<label for="assignedto">Assigned To</label>
 		<select id="assignedto"></select>
 	</div>
@@ -34,7 +44,7 @@
 		</select>
 	</div>
 	<div class="form-group">
-		<label>Is Deleted</label>
+		<label for="isdeleted">Is Deleted</label>
 		<select id="isdeleted">
 			<option value="All">All</option>
 			<option value="Yes">Yes</option>
@@ -52,9 +62,13 @@
 			onkeydown = "if (event.keyCode == 13) searchforcases()">
 	</div>
 	<input class="btn btn-default btn-sm" type="button" value="Search" onclick="searchforcases();"/>
+    </div>
+	
 
 </form>
-		<div class="panel panel-default" id="loading"><span class="fa fa-spinner fa-spin fa-fw" aria-hidden="true"></span>  Getting cases from the server...</div>
+        <div class="panel panel-default" id="loading" style="display: none;"><span class="fa fa-spinner fa-cog fa-fw" aria-hidden="true"></span>  Loading Customer Service Program...</div>
+		<div class="panel panel-default" id="loading" style="display: none;"><span class="fa fa-spinner fa-spin fa-fw" aria-hidden="true"></span>  Getting cases from the server...</div>
+        <div class="panel panel-default" id="badpassword" style="display: none;"><span class="fa fa-ban fa-spin text-danger" aria-hidden="true"></span>  Invalid Password</div>
 		<div id="searchinfo"></div>
 		<div id="caselisting"></div>        
 	</div>

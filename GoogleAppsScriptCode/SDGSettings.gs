@@ -3,6 +3,7 @@ var SDGSettings = (function () {
   var ss;
   var sh;
   var SDGSettings = {};
+  SDGSettings.password = "";
   SDGSettings.namespaceName = 'SDGSettings';
   ss = SpreadsheetApp.getActiveSpreadsheet();
   SDGSettings.spreadsheetname = ss.getName();

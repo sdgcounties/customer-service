@@ -54,6 +54,7 @@
    searchobject.isdeleted = $("#isdeleted").val();
    searchobject.searchtext = $("#searchtext").val();
    searchobject.caseid = $("#caseid").val();
+   searchobject.password = $("#password").val();
    console.log("getCasesWithActions has been called");
    console.log(searchobject);
    google.script.run.withSuccessHandler(ShowReturnedData).getCasesWithActions(JSON.stringify(searchobject));
@@ -68,9 +69,27 @@
     //Clear Search Results
     $('#searchinfo').children("div").remove();
     $('#caselisting').children("div").remove();
+
 	//Show Search and Case Divs
     $('#searchinfo').fadeIn();
     $('#caselisting').fadeIn();
+    
+    if(data.badpasswordmessage == "Password is invalid"){
+      //Password is bad
+      $('#loading').fadeOut();//Hide Loading div
+      $('#searchcontrolsdiv').fadeOut();//Hide search controls
+      $('#addcasebuttondiv').fadeOut();//Hide add case button
+      $('#badpassword').fadeIn();//show bad password message
+      $('#passworddiv').fadeIn();//show login controls
+      
+      return;
+    }else {
+      //Password is good
+      $('#searchcontrolsdiv').fadeIn();//Show search controls
+      $('#addcasebuttondiv').fadeIn();//Show add case button
+      $('#badpassword').fadeOut();
+      $('#passworddiv').fadeOut();
+    }
     
     var returneddata = JSON.parse(data);
     //===Search Results===

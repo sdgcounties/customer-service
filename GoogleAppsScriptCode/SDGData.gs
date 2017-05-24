@@ -7,8 +7,11 @@ var SDGData = (function () {
   //Data Operations
   SDGData.getRowData = getRowData;
   SDGData.getMatchingRows = getMatchingRows;
+  SDGData.clearAllDetailCaseFormLinks = clearAllDetailCaseFormLinks;
+  SDGData.clearAllDetailActionFormLinks = clearAllDetailActionFormLinks;
   SDGData.updateAllDetailCaseFormLinks = updateAllDetailCaseFormLinks;
   SDGData.updateAllDetailActionFormLinks = updateAllDetailActionFormLinks;
+
   //Case
   SDGData.getDeleteCaseLink = getDeleteCaseLink;
   SDGData.getDeleteActionLink = getDeleteActionLink;
@@ -19,6 +22,39 @@ var SDGData = (function () {
   return SDGData;
   
   //***** Public Functions***** 
+    /**
+  * clearAllDetailCaseFormLinks - updates the detail case form links
+  */
+  function clearAllDetailCaseFormLinks(){
+    var sheetName = SDGSettings.spreadsheet.sheetNameDetailCase; 
+    var ss = SpreadsheetApp.getActiveSpreadsheet();  
+    var sh = ss.getSheetByName(sheetName);
+    var cols = SDGSettings.sheetInfo.detailCase;
+    var values = sh.getDataRange().getValues();
+    
+    //clear caseaEditLinks
+    sh.getRange(2, cols.colEditCaseLink,values.length,1).clearContent();
+    //clear caseDeleteLinks
+    sh.getRange(2, cols.colDeleteCaseLink,values.length,1).clearContent();
+    //clear caseAddActionLinks
+    sh.getRange(2, cols.colAddActionLink,values.length,1).clearContent();
+  }
+      /**
+  * clearAllDetailActionFormLinks - updates the detail case form links
+  */
+  function clearAllDetailActionFormLinks(){
+    var sheetName = SDGSettings.spreadsheet.sheetNameDetailAction; 
+    var ss = SpreadsheetApp.getActiveSpreadsheet();  
+    var sh = ss.getSheetByName(sheetName);
+    var cols = SDGSettings.sheetInfo.detailAction;
+    var values = sh.getDataRange().getValues();
+    
+    //clear EditActionLink
+    sh.getRange(2, cols.colEditActionLink,values.length,1).clearContent();
+    //clear DeleteActionLink
+    sh.getRange(2, cols.colDeleteActionLink,values.length,1).clearContent();
+
+  }
   /**
   * updateAllDetailCaseFormLinks - updates the detail case form links
   */
@@ -30,18 +66,23 @@ var SDGData = (function () {
     var values = sh.getDataRange().getValues();
     
     for (var j=1; j<values.length; j++){ 
-      var caseId = values[j][cols.colCaseId-1];
+        var caseId = values[j][cols.colCaseId-1];
       //Edit
-      var caseEditLink = SDGData.getCaseEditLink(caseId);
-      sh.getRange(j+1, cols.colEditCaseLink).setValue(caseEditLink);
-      
+      if (sh.getRange(j+1, cols.colEditCaseLink).isBlank()){
+        var caseEditLink = SDGData.getCaseEditLink(caseId);
+        sh.getRange(j+1, cols.colEditCaseLink).setValue(caseEditLink);      
+      }
       //Delete
-      var caseDeleteLink = SDGData.getDeleteCaseLink(caseId);
-      sh.getRange(j+1, cols.colDeleteCaseLink).setValue(caseDeleteLink);
-      
-      //Add Action      
-      var caseAddActionLink = SDGData.getCaseAddActionLink(caseId);
-      sh.getRange(j+1, cols.colAddActionLink).setValue(caseAddActionLink);
+      if (sh.getRange(j+1, cols.colDeleteCaseLink).isBlank()){
+        var caseDeleteLink = SDGData.getDeleteCaseLink(caseId);
+        sh.getRange(j+1, cols.colDeleteCaseLink).setValue(caseDeleteLink);
+      }
+        
+      //Add Action
+      if (sh.getRange(j+1, cols.colAddActionLink).isBlank()){      
+        var caseAddActionLink = SDGData.getCaseAddActionLink(caseId);
+        sh.getRange(j+1, cols.colAddActionLink).setValue(caseAddActionLink);
+      }
       
     }
   }
@@ -56,10 +97,16 @@ var SDGData = (function () {
     var values = sh.getDataRange().getValues();
     for (var j=1; j<values.length; j++){ 
       var id = values[j][cols.colActionId-1];
+      //Edit Link
+      if (sh.getRange(j+1, cols.colEditActionLink).isBlank()){
       var editLink = SDGData.getActionEditLink(id);
       sh.getRange(j+1, cols.colEditActionLink).setValue(editLink);
+      }
+      //Delete Link
+      if (sh.getRange(j+1, cols.colDeleteActionLink).isBlank()){
       var deleteLink = SDGData.getDeleteActionLink(id);
       sh.getRange(j+1, cols.colDeleteActionLink).setValue(deleteLink);
+      }
     }
   }
   

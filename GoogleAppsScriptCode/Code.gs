@@ -8,8 +8,11 @@ function onOpen(){
   var spreadsheet = SpreadsheetApp.getActive();
   var menuItems = [
     {name: 'Create Folders (only needs to run once)', functionName: 'createFolders'},
-    {name: 'Update Forms Step 1 of 2: Update Forms', functionName: 'updateForms'},
-    {name: 'Update Forms Step 2 of 2: Update Form Links', functionName: 'updateFormLinks'},
+    {name: 'Update Forms Step 1 of 5: Reset Case Links', functionName: 'resetCaseLinks'},
+    {name: 'Update Forms Step 2 of 5: Reset Action Links', functionName: 'resetActionLinks'},    
+    {name: 'Update Forms Step 3 of 5: Update Forms', functionName: 'updateForms'},
+    {name: 'Update Forms Step 4 of 5: Update Case Links', functionName: 'updateCaseLinks'},
+    {name: 'Update Forms Step 5 of 5: Update Action Links', functionName: 'updateActionLinks'},
     {name: 'Email Customer Service Links', functionName:'emailCustomerServiceLinks'}
   ];
   spreadsheet.addMenu('Customer Service', menuItems);
@@ -19,16 +22,24 @@ function onOpen(){
 function createFolders(){
   SDGSettings.setup.setupAllFolders();
 }
+function resetCaseLinks(){
+  SDGForms.forms.resetCaseLinks();
+}
+function resetActionLinks(){
+  SDGForms.forms.resetActionLinks();
+}
 function updateForms(){
   SDGForms.forms.create('Case', 'Case');
   SDGForms.forms.create('Action', 'Action');
   SDGForms.forms.create('DeleteCase', 'Delete Case');
   SDGForms.forms.create('DeleteAction', 'Delete Action');
 }
-function updateFormLinks(){
-    SDGForms.forms.updateFormLinks();
+function updateCaseLinks(){
+    SDGForms.forms.updateCaseLinks();
 }
-
+function updateActionLinks(){
+    SDGForms.forms.updateActionLinks();
+}
 function emailCustomerServiceLinks(){
   var ui = SpreadsheetApp.getUi();
   var response = ui.prompt("Enter an email address to send the appropirate Customer Service Links", ui.ButtonSet.OK_CANCEL);
@@ -124,10 +135,22 @@ function filterCasesWebApp(cases, criteria){
   }
 
 function getCasesWithActions(passedobject){
+
   var starttime = Date.now();
   var searchobject = JSON.parse(passedobject)
+  var password = SDGSettings.password;
   var value = searchobject.searchtext; 
-  var returnobject = {};
+  var returnobject = {};  
+  if (searchobject.password == password){
+    //SDGErrors.custom("password matches");
+    //Do nothing the password matches
+    }else{
+    //SDGErrors.custom("password does not match password entered as |" + searchobject.password + "|" + " The password that is being looked for is |" + password + "|");
+    //return nothing - the password does not match
+      returnobject.badpasswordmessage = "Password is invalid";
+      return returnobject;
+  }
+
   var searchresults = []; 
   var cols = SDGSettings.sheetInfo; 
   var criteria = {};
